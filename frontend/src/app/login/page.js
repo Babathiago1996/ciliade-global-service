@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -10,15 +10,16 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/lib/context/AuthContext';
 import { LogIn } from 'lucide-react';
 
-export default function LoginPage() {
+/* 🔹 THIS component is allowed to use useSearchParams */
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
   const { login } = useAuth();
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -106,20 +107,18 @@ export default function LoginPage() {
               />
             </div>
 
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full"
-              disabled={loading}
-            >
+            <Button type="submit" size="lg" className="w-full" disabled={loading}>
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              Don't have an account?{' '}
-              <Link href={`/register${redirect !== '/' ? `?redirect=${redirect}` : ''}`} className="font-semibold text-black hover:underline">
+              Don&apos;t have an account?{' '}
+              <Link
+                href={`/register${redirect !== '/' ? `?redirect=${redirect}` : ''}`}
+                className="font-semibold text-black hover:underline"
+              >
                 Register here
               </Link>
             </p>
@@ -138,5 +137,14 @@ export default function LoginPage() {
         </p>
       </motion.div>
     </div>
+  );
+}
+
+/* 🔹 DEFAULT EXPORT WRAPPED IN SUSPENSE */
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }

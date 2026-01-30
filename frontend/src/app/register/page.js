@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -10,15 +10,16 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/lib/context/AuthContext';
 import { UserPlus } from 'lucide-react';
 
-export default function RegisterPage() {
+/* 🔹 Child component — SAFE to use useSearchParams */
+function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
   const { register } = useAuth();
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -51,7 +52,10 @@ export default function RegisterPage() {
       await register(registerData);
       router.push(redirect);
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      setError(
+        err.response?.data?.message ||
+          'Registration failed. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -172,12 +176,7 @@ export default function RegisterPage() {
               />
             </div>
 
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full"
-              disabled={loading}
-            >
+            <Button type="submit" size="lg" className="w-full" disabled={loading}>
               {loading ? 'Creating account...' : 'Create Account'}
             </Button>
           </form>
@@ -185,7 +184,12 @@ export default function RegisterPage() {
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Already have an account?{' '}
-              <Link href={`/login${redirect !== '/' ? `?redirect=${redirect}` : ''}`} className="font-semibold text-black hover:underline">
+              <Link
+                href={`/login${
+                  redirect !== '/' ? `?redirect=${redirect}` : ''
+                }`}
+                className="font-semibold text-black hover:underline"
+              >
                 Sign in here
               </Link>
             </p>
@@ -204,5 +208,14 @@ export default function RegisterPage() {
         </p>
       </motion.div>
     </div>
+  );
+}
+
+/* 🔹 Default export wrapped in Suspense */
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={null}>
+      <RegisterForm />
+    </Suspense>
   );
 }
