@@ -1,0 +1,8 @@
+{
+  "/ready-to-wear/[id]/page": "app/ready-to-wear/[id]/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/about/page": "app/about/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/lookbook/page": "app/lookbook/page.js",
+  "/ready-to-wear/page": "app/ready-to-wear/page.js"
+}
