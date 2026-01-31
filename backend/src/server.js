@@ -43,8 +43,9 @@ app.use(
   cors({
     origin: (origin, callback) => {
       const allowedOrigins = [
-        process.env.FRONTEND_URL,
-        "https://ciliade-global-service.vercel.app",
+        "http://localhost:3000"
+        // process.env.FRONTEND_URL,
+        // "https://ciliade-global-service.vercel.app" || 
       ];
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);

@@ -20,12 +20,21 @@ export default function DashboardPage() {
   const [measurement, setMeasurement] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
   
   const [profileData, setProfileData] = useState({
     firstName: '',
     lastName: '',
     phone: '',
   });
+useEffect(() => {
+  setMounted(true);
+}, []);
+if (!mounted) {
+  return null; // or a spinner
+}
+
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {

@@ -1,48 +1,62 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/lib/context/AuthContext';
-import api from '@/lib/api';
-import { 
-  Users, 
-  Package, 
-  MessageSquare, 
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useAuth } from "@/lib/context/AuthContext";
+import api from "@/lib/api";
+import {
+  Users,
+  Package,
+  MessageSquare,
   Calendar,
   TrendingUp,
   ShoppingBag,
-} from 'lucide-react';
-import AdminProducts from '@/components/admin/AdminProducts';
-import AdminMessages from '@/components/admin/AdminMessages';
-import AdminBookings from '@/components/admin/AdminBookings';
-import AdminCustomers from '@/components/admin/AdminCustomers';
+} from "lucide-react";
+import AdminProducts from "@/components/admin/AdminProducts";
+import AdminMessages from "@/components/admin/AdminMessages";
+import AdminBookings from "@/components/admin/AdminBookings";
+import AdminCustomers from "@/components/admin/AdminCustomers";
+import { formatDate } from "@/lib/utils";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, isAdmin, loading: authLoading } = useAuth();
   const router = useRouter();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      router.push('/login?redirect=/admin');
-    } else if (!authLoading && isAuthenticated && !isAdmin) {
-      router.push('/dashboard');
-    } else if (isAuthenticated && isAdmin) {
-      fetchStats();
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!authLoading) {
+      if (!isAuthenticated) {
+        router.push("/login?redirect=/admin");
+      } else if (isAuthenticated && !isAdmin) {
+        router.push("/dashboard");
+      } else if (isAuthenticated && isAdmin) {
+        fetchStats();
+      }
     }
-  }, [isAuthenticated, isAdmin, authLoading, router]);
+  }, [authLoading, isAuthenticated, isAdmin, router]);
 
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const { data } = await api.get('/stats');
+      const { data } = await api.get("/stats");
       setStats(data.data);
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error("Error fetching stats:", error);
     } finally {
       setLoading(false);
     }
@@ -156,10 +170,12 @@ export default function AdminDashboard() {
             <TabsContent value="overview">
               <div className="grid gap-6 md:grid-cols-2">
                 {/* Recent Bookings */}
-                <Card>
+                <Card >
                   <CardHeader>
                     <CardTitle>Recent Bookings</CardTitle>
-                    <CardDescription>Latest appointment requests</CardDescription>
+                    <CardDescription>
+                      Latest appointment requests
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     {stats?.recentActivity?.bookings?.length > 0 ? (
@@ -171,20 +187,21 @@ export default function AdminDashboard() {
                           >
                             <div>
                               <p className="font-medium">
-                                {booking.user?.firstName} {booking.user?.lastName}
+                                {booking.user?.firstName}{" "}
+                                {booking.user?.lastName}
                               </p>
                               <p className="text-sm text-gray-600 capitalize">
-                                {booking.serviceRequired.replace('-', ' ')}
+                                {booking.serviceRequired.replace("-", " ")}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {new Date(booking.preferredDate).toLocaleDateString()}
+                                {formatDate(booking.preferredDate)}
                               </p>
                             </div>
                             <span
                               className={`px-2 py-1 rounded-full text-xs ${
-                                booking.status === 'pending'
-                                  ? 'bg-yellow-100 text-yellow-800'
-                                  : 'bg-blue-100 text-blue-800'
+                                booking.status === "pending"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-blue-100 text-blue-800"
                               }`}
                             >
                               {booking.status}
@@ -193,7 +210,9 @@ export default function AdminDashboard() {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-gray-500 text-center py-4">No recent bookings</p>
+                      <p className="text-gray-500 text-center py-4">
+                        No recent bookings
+                      </p>
                     )}
                   </CardContent>
                 </Card>
@@ -222,13 +241,19 @@ export default function AdminDashboard() {
                               {message.message}
                             </p>
                             <p className="text-xs text-gray-500 mt-1">
-                              {new Date(message.createdAt).toLocaleDateString()}
+                              {mounted
+                                ? new Date(
+                                    message.createdAt,
+                                  ).toLocaleDateString()
+                                : formatDate(message.createdAt)}
                             </p>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-gray-500 text-center py-4">No recent messages</p>
+                      <p className="text-gray-500 text-center py-4">
+                        No recent messages
+                      </p>
                     )}
                   </CardContent>
                 </Card>

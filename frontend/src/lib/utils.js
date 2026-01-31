@@ -14,9 +14,11 @@ export function formatPrice(price) {
 }
 
 export function formatDate(date) {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(date));
+  if (!date) return "";
+
+  try {
+    return new Date(date).toISOString().split("T")[0];
+  } catch {
+    return "";
+  }
 }
