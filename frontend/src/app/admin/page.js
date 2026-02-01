@@ -158,7 +158,7 @@ export default function AdminDashboard() {
 
           {/* Management Tabs */}
           <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5">
+            <TabsList className="flex w-full overflow-x-auto no-scrollbar lg:grid lg:grid-cols-5">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="products">Products</TabsTrigger>
               <TabsTrigger value="bookings">Bookings</TabsTrigger>
@@ -168,9 +168,9 @@ export default function AdminDashboard() {
 
             {/* Overview Tab */}
             <TabsContent value="overview">
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2 ">
                 {/* Recent Bookings */}
-                <Card >
+                <Card>
                   <CardHeader>
                     <CardTitle>Recent Bookings</CardTitle>
                     <CardDescription>

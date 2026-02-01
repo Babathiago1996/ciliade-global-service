@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/page": [
+    "/lookbook/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/lookbook/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,20 +11,30 @@
       "static/css/css-src_app_globals_css-node_modules_next_font_google_target_css-node_modules_next_font_googl-accfe3.css",
       "static/chunks/app/layout.js"
     ],
-    "/login/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/login/page.js"
+      "static/chunks/app/page.js"
     ],
     "/admin/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/admin/page.js"
     ],
-    "/_not-found/page": [
+    "/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/login/page.js"
+    ],
+    "/custom-tailoring/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/custom-tailoring/page.js"
+    ],
+    "/contact/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/contact/page.js"
     ]
   }
 }
